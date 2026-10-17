@@ -12,11 +12,10 @@
       --navy: #18345d;
       --blue: #315f98;
       --mid-blue: #789bc7;
-      --pale-blue: #eaf2fc;
-      --paper: #fffdf8;
       --ink: #243650;
       --muted: #6f8097;
       --line: #c6d7ec;
+      --paper: rgba(255, 253, 248, .94);
     }
 
     * {
@@ -30,12 +29,40 @@
       display: grid;
       place-items: center;
       color: var(--ink);
-      background:
-        radial-gradient(circle at 15% 15%, rgba(255,255,255,.95) 0 2px, transparent 3px),
-        radial-gradient(circle at 85% 70%, rgba(255,255,255,.8) 0 2px, transparent 3px),
-        linear-gradient(135deg, #d8e7f9, #eff5fc 48%, #cbdcf2);
-      background-size: 48px 48px, 62px 62px, auto;
       font-family: "DM Sans", Arial, sans-serif;
+      background: #cbdcf2;
+      isolation: isolate;
+    }
+
+    /* FULL-SCREEN VIDEO BACKGROUND */
+    .video-background {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      overflow: hidden;
+      background: #bcd2ed;
+    }
+
+    .video-background video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    /* Soft blue overlay */
+    .video-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(199, 222, 250, .60),
+          rgba(235, 243, 255, .46),
+          rgba(151, 184, 226, .60)
+        );
     }
 
     .site-shell {
@@ -44,20 +71,23 @@
 
     .topline {
       text-align: center;
-      color: #49698f;
+      color: #18345d;
       font-size: .72rem;
       letter-spacing: .2em;
       text-transform: uppercase;
       margin-bottom: 14px;
+      text-shadow: 0 1px 8px rgba(255,255,255,.7);
     }
 
     .portal {
       position: relative;
       overflow: hidden;
-      background: rgba(255,253,248,.96);
-      border: 1px solid #fff;
+      background: var(--paper);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.9);
       border-radius: 22px;
-      box-shadow: 0 22px 65px rgba(34,68,112,.18);
+      box-shadow: 0 22px 65px rgba(24, 52, 93, .25);
     }
 
     .portal::before {
@@ -67,13 +97,14 @@
       border: 1px solid var(--line);
       border-radius: 15px;
       pointer-events: none;
+      z-index: 2;
     }
 
     .masthead {
       position: relative;
       text-align: center;
       padding: 34px 28px 25px;
-      background: linear-gradient(180deg, #f4f8fe, #fffdf8);
+      background: rgba(239, 246, 255, .75);
       border-bottom: 1px solid var(--line);
     }
 
@@ -89,7 +120,7 @@
       border-radius: 50%;
       color: var(--blue);
       font-size: 1.6rem;
-      background: #fff;
+      background: rgba(255,255,255,.9);
     }
 
     .eyebrow {
@@ -194,7 +225,7 @@
       align-items: center;
       gap: 15px;
       text-align: left;
-      background: #f5f8fd;
+      background: rgba(245, 248, 253, .88);
       border: 1px solid var(--line);
       border-radius: 14px;
     }
@@ -256,7 +287,7 @@
 
     .btn.secondary {
       color: var(--blue);
-      background: white;
+      background: rgba(255,255,255,.92);
     }
 
     .btn.secondary:hover {
@@ -265,7 +296,7 @@
 
     .micro {
       margin-top: 22px;
-      color: #8b98a9;
+      color: #788ba4;
       font-size: .75rem;
       text-align: center;
     }
@@ -275,7 +306,7 @@
       margin: 26px auto 0;
       padding: clamp(20px, 4vw, 36px);
       border: 1px solid #d7e1ef;
-      background: #fff;
+      background: rgba(255,255,255,.93);
       box-shadow: 0 8px 25px rgba(38,67,106,.06);
       line-height: 1.8;
       font-size: .94rem;
@@ -384,17 +415,13 @@
     .footer {
       padding: 18px 20px 24px;
       text-align: center;
-      color: #8a9bb0;
+      color: #788ba4;
       font-size: .7rem;
       letter-spacing: .05em;
     }
 
     .footer span {
       color: #6386b3;
-    }
-
-    .screen-three .big-heading {
-      font-size: clamp(2.2rem, 5vw, 3.3rem);
     }
 
     @media (max-width: 560px) {
@@ -428,10 +455,29 @@
         gap: 9px;
       }
     }
+
+    /* Reduce motion for visitors who prefer it */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
   </style>
 </head>
 
 <body>
+  <!-- VIDEO BACKGROUND: place background.mp4 beside index.html -->
+  <div class="video-background" aria-hidden="true">
+    <video autoplay muted loop playsinline>
+      <source src="background.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <div class="video-overlay" aria-hidden="true"></div>
+
   <main class="site-shell">
     <div class="topline">A private notice · prepared with love</div>
 
